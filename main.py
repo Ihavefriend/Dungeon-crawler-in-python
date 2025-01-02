@@ -1,166 +1,51 @@
 import random
 import time
-#################################################################################################################################################
-#################################################################################################################################################
-#################################################################################################################################################
-"""                                                                 ITEMS                                                                                                                     """
-items = {
-    "Iron Sword": {"CLASS": "weapon", "STATS": {"ATK": 3, "DEF": 1}, "DISC": "A battle-worn iron sword dropped by the goblins"},
-    "Healing Potion": {"CLASS": "potion", "STATS": {"HP": 10}, "DISC": "A mixture of various healing herbs, it tastes very bitter"},
-    "Magic Potion": {"CLASS": "potion", "STATS": {"MP": 10}, "DISC": "Restores magical energy with a refreshing taste"},
-    "Iron Shield": {"CLASS": "armor", "STATS": {"DEF": 1}, "DISC": "A sturdy shield made of iron, providing basic protection"},
-    "Cheese": {"CLASS": "potion", "STATS": {"HP": 20}, "DISC": "A block of cheese? Where did this come from"},
-    "Battle Axe": {"CLASS": "weapon", "STATS": {"ATK": 8}, "DISC": "A heavy axe with a sharp blade, often used by orcs"},
-    "Bone Armor": {"CLASS": "armor", "STATS": {"DEF": 5}, "DISC": "An armor crafted from bones, offering solid protection"},
-    "Troll Club": {"CLASS": "weapon", "STATS": {"ATK": 12}, "DISC": "A large club made from the bones of fallen enemies"},
-    "Vampire Fang": {"CLASS": "weapon", "STATS": {"ATK": 6}, "DISC": "A fang from a vampire, sharp and dangerous"},
-    "Bloodstone": {"CLASS": "potion", "STATS": {"MP": 50}, "DISC": "A magical stone used by vampires to enhance their powers"},
-    "Health Potion": {"CLASS": "potion", "STATS": {"HP": 50}, "DISC": "A potent potion that heals a large amount of health"},
-    "Large Healing Potion": {"CLASS": "potion", "STATS": {"HP": 100}, "DISC": "A larger version of the healing potion, restoring more health. This tastes like cherry!"}
-}
-
-shop_inventory = {
-    "Iron Sword": {"price": 10},
-    "Healing Potion": {"price": 8},
-    "Magic Potion": {"price": 12},
-    "Iron Shield": {"price": 15},
-    "Cheese": {"price": 5},
-    "Battle Axe": {"price": 20},
-    "Bone Armor": {"price": 25},
-    "Large Healing Potion": {"price": 30},
-    # Skill Books
-    "Skill Book: Backstab": {"price": 20, "skill": "Arrow Storm"},
-    "Skill Book: Shield Bash": {"price": 25, "skill": "Berserk"},
-    "Skill Book: Heal": {"price": 30, "skill": "Heal"}
-}
-"""                                                           LOOT TABLES                                                                                                                     """
-
-drops = {
-    "Goblin": {"Iron Sword": 70, "Healing Potion": 30},
-    "Giant Rat": {"Cheese": 60, "Iron Shield": 40},
-    "Orc": {"Battle Axe": 50, "Magic Potion": 50},
-    "Skeleton Warrior": {"Bone Armor": 75, "Health Potion": 25},
-    "Troll": {"Troll Club": 80, "Large Healing Potion": 20},
-    "Vampire": {"Vampire Fang": 60, "Bloodstone": 40}
-}
-"""                                                            FLOORS                                                                                 """
-floors = {
-    1: {
-        "monsters": [
-            {"name": "Goblin", "EXP": 50, "GOLD": (3, 6), "HP": 20, "ATK": 5, "DEF": 2},
-            {"name": "Giant Rat", "EXP": 40, "GOLD": (2, 5), "HP": 15, "ATK": 2, "DEF": 1}
-        ],
-        "difficulty": "Easy"
-    },
-    2: {
-        "monsters": [
-            {"name": "Orc", "EXP": 60, "GOLD": (5, 10), "HP": 20, "ATK": 5, "DEF": 8},
-            {"name": "Skeleton Warrior", "EXP": 100, "GOLD": (8, 15), "HP": 14, "ATK": 10, "DEF": 2}
-        ],
-        "difficulty": "Normal"
-    },
-    3: {
-        "monsters": [
-            {"name": "Troll", "EXP": 200, "GOLD": (15, 25), "HP": 30, "ATK": 12, "DEF": 5},
-            {"name": "Vampire", "EXP": 300, "GOLD": (20, 35), "HP": 40, "ATK": 15, "DEF": 6}
-        ],
-        "difficulty": "Hard"
-    },
-}
-
-"""                                                             SKILLS                                                                                      """
-skills = {
-    "Slash": {
-        "TYPE": "attack",
-        "CLASS": "ROUGE",
-        "POWER": 10,
-        "MP_COST": 0,
-        "DISC": "A Swift strike with your dagger.",
-        "STAT_SCALING": {"ATK": 1.0},
-    },
-        "Basic Sword Art": {
-        "TYPE": "attack",
-        "CLASS": "KNIGHT",
-        "POWER": 10,
-        "MP_COST": 0,
-        "DISC": "A basic sword Art.",
-        "STAT_SCALING": {"ATK": 1.0},
-    },
-    "Fireball": {
-        "TYPE": "attack",
-        "CLASS": "MAGE",
-        "POWER": 15,
-        "MP_COST": 5,
-        "DISC": "A fire spell that burns enemies.",
-        "STAT_SCALING": {"ATK": 1.3},
-    },
-    "Heal": {
-        "TYPE": "support",
-        "CLASS": "MAGE",
-        "POWER": 20,
-        "MP_COST": 8,
-        "DISC": "Heals the caster or an ally.",
-        "STAT_SCALING": {"INT":1},
-    },
-    "Arrow Storm": {
-        "TYPE": "attack",
-        "CLASS": "ROUGE",
-        "POWER": 15,
-        "MP_COST": 10,
-        "DISC": "A powerful barrage of arrows.",
-        "STAT_SCALING": {"ATK": 1.2},
-    },
-    "Berserk": {
-        "TYPE": "attack",
-        "CLASS": "KNIGHT",
-        "POWER": 25,
-        "MP_COST": 8,
-        "DISC": "A powerful barrage of arrows.",
-        "STAT_SCALING": {"ATK": 2,"DEF":-0.5},
-    },
-    "Hammer Smash":{
-        "TYPE": "attack",
-        "CLASS": "KNIGHT",
-        "POWER": 30,
-        "MP_COST": 15,
-        "DISC": "A strong strike on the ground, it shakes up the enemies",
-        "STAT_SCALING": {"ATK": 0.9},
-    }
-}
-
+from assets import *
 
 #################################################################################################################################################
 #################################################################################################################################################
 #################################################################################################################################################
+
+
 def create_character():
     name = input("Enter your character's name: ")
     time.sleep(1)
-    print("\nChoose your race: Elf, Dwarf, Human or Valhallan")
-    race = input("Race: ").lower()
+    print("\nChoose your race: Elf, Dwarf, Human or Beastman")
+    while True:
+        race = input("Race: ").lower()
+        if race in ["elf", "dwarf", "human", "beastman"]:
+            break
+        else:
+            pass
     print("\nChoose your class: Rogue, Knight, or Mage")
-    character_class = input("Class: ").lower()
-    
+    while True:
+        character_class = input("Class: ").lower()
+        if character_class in ["rouge","knight",'mage']:
+            break
+        else:
+            pass
+
     character = {
         "name": name,
         "race": race,
         "class": character_class,
         "LVL": 1,
-        "EXP":0,
-        "MXP":100,
+        "EXP": 0,
+        "MXP": 100,
         "HP": 10,
-        "ATK": 10,
+        "ATK": 0,
         "AGI": 5,
         "DEF": 5,
         "INT": 5,
         "MP": 10,
-        "MMP":10,
+        "MMP": 10,
         "inventory": {
             "weapons": [],
             "potions": [],
             "armors": [],
             "accessories": []
         },
-        "equipped_items": {"weapon": None, "armor": None},  
+        "equipped_items": {"weapon": None, "armor": None},
         "floor": 1,
         "MHP": 10,
         "skills": [],
@@ -183,7 +68,6 @@ def create_character():
         character["MMP"] += 10
         character["skills"].append("Fireball")
 
-
     if race == "human":
         character["ATK"] += 4
         character["DEF"] += 4
@@ -192,7 +76,7 @@ def create_character():
         character["HP"] += 10
         character["MHP"] += 10
         character["MP"] += 5
-        character["MMP"] += 5  
+        character["MMP"] += 5
     elif race == "elf":
         character["HP"] += 7
         character["MHP"] += 7
@@ -200,36 +84,36 @@ def create_character():
         character["AGI"] += 5
         character["DEF"] += 1
         character["MP"] += 10
-        character["MMP"] += 10 
+        character["MMP"] += 10
     elif race == "dwarf":
         character["ATK"] += 5
         character["HP"] += 3
         character["MHP"] += 3
         character["DEF"] += 10
         character["MP"] += 3
-        character["MMP"] += 3 
-    elif race == "valhallan":
+        character["MMP"] += 3
+    elif race == "beastman":
         character["ATK"] += 7
         character["DEF"] += 5
         character["HP"] += 3
         character["MHP"] += 3
         character["MP"] += 5
-        character["MMP"] += 5  
+        character["MMP"] += 5
 
     return character
+
 
 #################################################################################################################################################
 #################################################################################################################################################
 
 def levelup(character):
     """Increase the character's level and stats when they gain enough XP."""
-    character['MXP'] = 100  # XP required to level up
     if character["EXP"] >= character['MXP']:
         # Calculate the level-up
         character["LVL"] += 1
-        character["EXP"] -= character['MXP']  # Reset XP after leveling up
+        character["EXP"] -= character['MXP']  # Reseting XP after leveling up
         print(f"{character['name']} leveled up to level {character['LVL']}!")
-        
+
         # Increase stats upon leveling up
         character["ATK"] += 2
         character["DEF"] += 2
@@ -238,6 +122,7 @@ def levelup(character):
         character["MP"] = character["MMP"]
         character["HP"] = character["MHP"]
         character['MXP'] += 50
+
 
 ################################################################################################################################################
 ################################################################################################################################################
@@ -251,6 +136,7 @@ def add_inventory(character, item_name):
     else:
         print(f"Item {item_name} not found.")
 
+
 #################################################################################################################################################
 #################################################################################################################################################
 
@@ -260,8 +146,8 @@ def roll_loot(monster):
         print(f"Monster {monster_name} not found in loot tables.")
         return None
     # Handles dropping gold
-    gold_min,gold_max = monster['GOLD']
-    gold_dropped = random.randint(gold_min,gold_max)
+    gold_min, gold_max = monster['GOLD']
+    gold_dropped = random.randint(gold_min, gold_max)
     print(f"{monster_name} dropped {gold_dropped} gold")
     # Handles dropping item loot
     mdrops = drops[monster_name]
@@ -270,7 +156,7 @@ def roll_loot(monster):
 
     dropped_item = random.choices(items, weights=weights, k=1)[0]
     print(f"Rolled loot: {dropped_item}")
-    return (dropped_item,gold_dropped)
+    return dropped_item, gold_dropped
 
 
 ################################################################################################################################################
@@ -292,14 +178,15 @@ def use_skill(character, skill_name, target):
             total_damage += character[stat] * scale
     character["MP"] -= skill["MP_COST"]
 
-    if skill["TYPE"] == "support":  
+    if skill["TYPE"] == "support":
         restored_amount = min(target["MHP"] - target["HP"], int(total_damage))
         target["HP"] += restored_amount
         print(f"{character['name']} used {skill_name} and restored {restored_amount} HP!")
-    else:  
+    else:
         damage = max(1, int(total_damage) - target["DEF"])
         target["HP"] -= damage
         print(f"{character['name']} used {skill_name} and dealt {damage} damage!")
+
 
 ################################################################################################################################################
 ################################################################################################################################################
@@ -309,7 +196,7 @@ def use_potion(character, potion_name):
     potion = items.get(potion_name)
     if potion and potion["CLASS"] == "potion":
         for stat, value in potion["STATS"].items():
-            max_stat = f"M{stat}"  
+            max_stat = f"M{stat}"
             if stat in ["HP", "MP"]:
                 restored_amount = min(character[max_stat] - character[stat], value)
                 character[stat] += restored_amount
@@ -323,6 +210,7 @@ def use_potion(character, potion_name):
 ################################################################################################################################################
 ################################################################################################################################################
 """                                                          EQUIPING/UNEQUIPING ITEMS                                                              """
+
 
 def unequip_item(character, item_name):
     item = items.get(item_name)
@@ -356,6 +244,8 @@ def equip_item(character, item_name):
         print(f"{item_name} equipped! Applied stats: {item['STATS']}.")
     else:
         print(f"{item_name} cannot be equipped.")
+
+
 ################################################################################################################################################
 ################################################################################################################################################
 
@@ -382,7 +272,7 @@ def shop(character):
     while True:
         print("\nAvailable Items for Sale:")
         for i, (item_name, details) in enumerate(shop_inventory.items()):
-            print(f"{i+1}. {item_name} - {details['price']} gold")
+            print(f"{i + 1}. {item_name} - {details['price']} gold")
         print("0. Exit Shop")
 
         choice = input("\nSelect an item to buy or 0 to exit: ")
@@ -394,7 +284,8 @@ def shop(character):
         item_price = shop_inventory[item_name]['price']
         if character['GOLD'] >= item_price:
             if shop_inventory[item_name]['skill'] in skills:
-                print(f"Learning the skill {shop_inventory [item_name]['skill']}")
+                print(f"Learning the skill {shop_inventory[item_name]['skill']}")
+                time.sleep(1)
                 learn_skill(character, shop_inventory[item_name]['skill'])
             else:
                 add_inventory(character, item_name)
@@ -403,13 +294,15 @@ def shop(character):
         else:
             print("You don't have enough gold!")
 
+
 ################################################################################################################################################
 ################################################################################################################################################
 def combat(character, monster):
     time.sleep(1)
     print(f"\nA wild {monster['name']} appears!")
     while character["HP"] > 0 and monster["HP"] > 0:
-        print(f"\n{character['name']}'s HP: {character['HP']} | MP: {character['MP']} | LVL: {character['LVL']} | XP: {character['EXP']}/{character['MXP']}")
+        print(
+            f"\n{character['name']}'s HP: {character['HP']}/{character['MHP']} | MP: {character['MP']} / {character['MMP']} | LVL: {character['LVL']} | XP: {character['EXP']}/{character['MXP']}")
         print(f"{monster['name']}'s HP: {monster['HP']}")
 
         print(f"\nWhat will {character['name']} do?")
@@ -418,7 +311,7 @@ def combat(character, monster):
         if action == "1":
             print("\nChoose a skill to use:")
             for i, skill in enumerate(character["skills"]):
-                print(f"{i+1}. {skill} - {skills[skill]['DISC']}")
+                print(f"{i + 1}. {skill} - {skills[skill]['DISC']}")
             skill_choice = int(input("Select skill: ")) - 1
             if 0 <= skill_choice < len(character["skills"]):
                 if skills[character["skills"][skill_choice]]["CLASS"] != "support":
@@ -428,11 +321,11 @@ def combat(character, monster):
                     continue
             else:
                 print("Invalid skill choice!")
-        #Fleeing (ends the current run)
+        # Fleeing (ends the current run)
         elif action == "2":
             print(f"{character['name']} fled the battle!")
             return False
-        #Opening the inventory
+        # Opening the inventory
         elif action == "3":  # Inventory Menu
             print("\nYour Inventory:")
             print(f"1. Weapons: {character['inventory']['weapons']}")
@@ -479,12 +372,12 @@ def combat(character, monster):
 
     if character["HP"] > 0:
         print(f"\n{character['name']} defeated the {monster['name']}!\n")
-        #Loot Handling
-        loot,gold = roll_loot(monster)
-        add_inventory(character,loot)
-        character['GOLD']+=gold
-        
-        #EXP handling
+        # Loot Handling
+        loot, gold = roll_loot(monster)
+        add_inventory(character, loot)
+        character['GOLD'] += gold
+
+        # EXP handling
         character["EXP"] += monster["EXP"]
         print(f"{character['name']} gained {monster['EXP']} XP!")
         levelup(character)
@@ -492,7 +385,8 @@ def combat(character, monster):
     else:
         print(f"\n{character['name']} was defeated by the {monster['name']}.")
         return False
-    time.spleep(3)
+    time.sleep(1)
+
 
 ################################################################################################################################################
 ################################################################################################################################################
@@ -500,14 +394,13 @@ def combat(character, monster):
 def rest_floor(character):
     print("\n-------------Rest Floor----------------")
     time.sleep(2)
-    print(f"{character['name']} has rested! {character['MHP'] - character['HP']} HP, {character['MMP'] - character['MP']} MP has been restored!")
+    print(
+        f"{character['name']} has rested! {character['MHP'] - character['HP']} HP, {character['MMP'] - character['MP']} MP has been restored!")
     character["MP"] = character["MMP"]
     character["HP"] = character["MHP"]
     # Shop functionality finally added
     shop(character)
-    
-    
-    
+
 
 ################################################################################################################################################
 ################################################################################################################################################
@@ -519,20 +412,21 @@ def explore_floor(character):
     for monster in current_floor['monsters']:
         if not combat(character, monster):
             print("Game Over!")
-            return False  
+            return False
     time.sleep(3)
-    return True  
+    return True
+
 
 ################################################################################################################################################
 ################################################################################################################################################
 
 def next_floor(character):
-    if character['floor'] == 1 or 6 or 9 or 12: #change it to 3 later
+    if character['floor'] == 1 or 6 or 9 or 12:  # change it to 3 later
         print(f"{character['name']} finds a crevice? where does this lead")
         character['floor'] += 1
         rest_floor(character)
         return True
-    if character['floor'] < 13:  
+    if character['floor'] < 13:
         character['floor'] += 1
         print(f"\n{character['name']} moves to Floor {character['floor']}!")
         return True
@@ -540,26 +434,30 @@ def next_floor(character):
         print("You've reached the boss floor! Prepare for the final battle!")
         return False
 
+
 ################################################################################################################################################
 ################################################################################################################################################
 
 def main_game():
     print("Welcome to the Dungeon!")
     character = create_character()
-    
+
     while True:
         if not explore_floor(character):
-            break  
-        
-        if character['floor'] == 3: #ts js for testing
-            print(f"Congratulations, {character['name']}! You've reached the boss floor!")
             break
-        
+
+        if character['floor'] == 12:
+            print(f"Congratulations, {character['name']}! You've reached the boss floor!")
+
+
+
         next_floor(character)
 
     print("\nGame Over!")
     print(f"{character['name']} reached floor {character['floor']}.")
     print("Inventory:", character['inventory'])
+
+
 ################################################################################################################################################
 ################################################################################################################################################
 if __name__ == "__main__":
